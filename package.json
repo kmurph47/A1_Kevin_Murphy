@@ -7,7 +7,7 @@
     "start": "parcel index.html"
   },
   "dependencies": {
-    "parcel": "^2.6.2",
+    "parcel": "^2.9.3",
     "typescript": "^5.1.6"
   },
   "author": "KM",

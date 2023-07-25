@@ -1,11 +1,10 @@
-console.log("testing")
-
-let moveInt: number = 0;
-
+// SET NUMBER OF ROWS AND COLUMNS HERE.
 let rows: number = 6;
 let cols: number = 7;
 
+let moveNumber: number = 0;
 let gameOver: boolean = false;
+
 
 enum STATUS {
     AVAILABLE = 'AVAILABLE',
@@ -13,6 +12,8 @@ enum STATUS {
     P2_SELECTED = 'P2_SELECTED',
   }
 
+
+// Interaction with individual tiles
 class Tile {
 
     id: number
@@ -33,13 +34,16 @@ class Tile {
       }
 
       handleClick() {
+
+        // If tile already selected or game is over nothing occurs
         if (this.status === STATUS.P1_SELECTED || this.status === STATUS.P2_SELECTED || gameOver === true) return
 
+        //Otherwise changes tiles status to new player.
         this.element.classList.remove(this.status.toLowerCase())
-        if (moveInt % 2 === 0  ) this.status = this.status === STATUS.AVAILABLE ? STATUS.P2_SELECTED : STATUS.AVAILABLE
+        if (moveNumber % 2 === 0  ) this.status = this.status === STATUS.AVAILABLE ? STATUS.P2_SELECTED : STATUS.AVAILABLE
         else this.status = this.status === STATUS.AVAILABLE ? STATUS.P1_SELECTED : STATUS.AVAILABLE
         this.element.classList.add(this.status.toLowerCase())
-        moveInt = moveInt + 1;
+        moveNumber = moveNumber + 1;
 
       }
 
@@ -54,6 +58,8 @@ class Tile {
 
 }
 
+
+// Interaction with individual rows of tiles.
 class Row {
 
     id: number
@@ -81,6 +87,7 @@ class Row {
 
 }
 
+// Interaction with tile map. Used to get array of numbers containing tiles for each player
 class TileMap {
     rows: Row[]
     selectedTilesP1: number[] = []
@@ -98,8 +105,6 @@ class TileMap {
             this.getSelectedSeatsIdP1()
             this.getSelectedSeatsIdP2()
 
-            if (moveInt === rows*cols  ) console.log("draw")
-
 
           })
        
@@ -112,7 +117,7 @@ class TileMap {
          }, [])
          //console.log(`selected tiles: ${this.selectedTilesP1.join(',')}`)
          //console.log('P1: '+checkIfWinner(this.selectedTilesP1))
-         //console.log(moveInt)
+         //console.log(moveNumber)
 
          
       }
@@ -124,13 +129,15 @@ class TileMap {
         }, [])
         //console.log(`selected tiles: ${this.selectedTilesP2.join(',')}`)
         console.log('P2: '+checkIfWinner(this.selectedTilesP2))
-        //console.log(moveInt)
+        //console.log(moveNumber)
 
         
      }
 }
 
 
+
+// Reset button, reloads page thus reseting game.
 class resetButton {
 
     element: HTMLDivElement
@@ -144,7 +151,7 @@ class resetButton {
         this.element.addEventListener('click', () => {
             
             this.handleClick()
-            location.reload();
+            
 
           })
         
@@ -152,19 +159,13 @@ class resetButton {
 
       handleClick() {
 
-        this.element.innerText = 'pressed'
-
-        
-
-        
+        location.reload();
 
       }
  }
 
 
-//const boardMap = new TileMap(rows,cols)
-//document.getElementById('game')?.appendChild(boardMap.element)
-
+// Creates display layout module containing board, score and reset button to add to main div.
 class displayLayout {
 
     gameContainer: HTMLDivElement
@@ -191,8 +192,10 @@ class displayLayout {
         this.gameContainer.appendChild(resetElement.element)
         
 
+        // With each click...
         this.gameContainer.addEventListener('click', () => {
 
+          // Checks if either black or white won.
             if(checkIfWinner(boardMap.selectedTilesP1)) {
                 scoreElement.innerText = 'Black Wins'
                 gameOver = true
@@ -202,41 +205,34 @@ class displayLayout {
                 gameOver = true
             }
             else {
+              //Otherwise checks for draw.
 
-            if (moveInt === rows*cols  ) scoreElement.innerText = 'Draw'
+            if (moveNumber === rows*cols  ) scoreElement.innerText = 'Draw'
             else {
-
-            if (moveInt % 2 === 0 ) scoreElement.innerText = 'White Turn'
+              //Finally checks who's turn it is.
+            if (moveNumber % 2 === 0 ) scoreElement.innerText = 'White Turn'
             else scoreElement.innerText = 'Black Turn'
             }
         
         }
 
-            
-
-
           })
 
         
 
-        document
-          .getElementById('game')
-          ?.append(this.gameContainer)
+        document.getElementById('game') ?.append(this.gameContainer)
       }
-
-      
-
-
-
-
 
 }
 
-const tets = new displayLayout()
+// Initiates display
+const displayGame = new displayLayout()
 
 
+
+// Various check for winner functions.
 function checkIfWinner(board: Array<number>) {
-    // Horizontal check
+    // Horizontal 
     for (let j = 0; j < cols*(rows-1); j=j+cols) {
 
       for (let i = 0; i < cols-4; i++) {
@@ -254,7 +250,7 @@ function checkIfWinner(board: Array<number>) {
 
 
 
-    // Vertical check
+    // Vertical 
     for (let j = 0; j < cols; j++) {
 
       for (let i = 0; i < rows*(cols-4); i=i+cols) {
@@ -271,7 +267,7 @@ function checkIfWinner(board: Array<number>) {
       }
     }
 
-    // Diagonal down check
+    // Diagonal down 
     for (let j = 0; j < cols-4; j++) {
 
         for (let i = 0; i < rows*(cols-4); i=i+cols) {
@@ -289,7 +285,7 @@ function checkIfWinner(board: Array<number>) {
         }
       }  
 
-          // Diagonal up check
+          // Diagonal up 
     for (let j = 0; j < cols-4; j++) {
 
         
@@ -309,14 +305,6 @@ function checkIfWinner(board: Array<number>) {
           }
         }
       }  
-
-
-
-
-
-    
-  
-    
   
     return false
   }

@@ -1,8 +1,8 @@
 "use strict";
-console.log("testing");
-let moveInt = 0;
+// SET NUMBER OF ROWS AND COLUMNS HERE.
 let rows = 6;
 let cols = 7;
+let moveNumber = 0;
 let gameOver = false;
 var STATUS;
 (function (STATUS) {
@@ -10,6 +10,7 @@ var STATUS;
     STATUS["P1_SELECTED"] = "P1_SELECTED";
     STATUS["P2_SELECTED"] = "P2_SELECTED";
 })(STATUS || (STATUS = {}));
+// Interaction with individual tiles
 class Tile {
     constructor(id) {
         this.id = id;
@@ -22,15 +23,17 @@ class Tile {
         });
     }
     handleClick() {
+        // If tile already selected or game is over nothing occurs
         if (this.status === STATUS.P1_SELECTED || this.status === STATUS.P2_SELECTED || gameOver === true)
             return;
+        //Otherwise changes tiles status to new player.
         this.element.classList.remove(this.status.toLowerCase());
-        if (moveInt % 2 === 0)
+        if (moveNumber % 2 === 0)
             this.status = this.status === STATUS.AVAILABLE ? STATUS.P2_SELECTED : STATUS.AVAILABLE;
         else
             this.status = this.status === STATUS.AVAILABLE ? STATUS.P1_SELECTED : STATUS.AVAILABLE;
         this.element.classList.add(this.status.toLowerCase());
-        moveInt = moveInt + 1;
+        moveNumber = moveNumber + 1;
     }
     get isSelectedP1() {
         return this.status === STATUS.P1_SELECTED;
@@ -39,6 +42,7 @@ class Tile {
         return this.status === STATUS.P2_SELECTED;
     }
 }
+// Interaction with individual rows of tiles.
 class Row {
     constructor(id, tileNumber) {
         this.id = id;
@@ -57,6 +61,7 @@ class Row {
         return this.tiles.filter((tile) => tile.isSelectedP2).map((tile) => tile.id);
     }
 }
+// Interaction with tile map. Used to get array of numbers containing tiles for each player
 class TileMap {
     constructor(rowNumber, tileNumberPerRow) {
         this.selectedTilesP1 = [];
@@ -70,8 +75,6 @@ class TileMap {
         this.element.addEventListener('click', () => {
             this.getSelectedSeatsIdP1();
             this.getSelectedSeatsIdP2();
-            if (moveInt === rows * cols)
-                console.log("draw");
         });
     }
     getSelectedSeatsIdP1() {
@@ -81,7 +84,7 @@ class TileMap {
         }, []);
         //console.log(`selected tiles: ${this.selectedTilesP1.join(',')}`)
         //console.log('P1: '+checkIfWinner(this.selectedTilesP1))
-        //console.log(moveInt)
+        //console.log(moveNumber)
     }
     getSelectedSeatsIdP2() {
         this.selectedTilesP2 = this.rows.reduce((total, row) => {
@@ -90,9 +93,10 @@ class TileMap {
         }, []);
         //console.log(`selected tiles: ${this.selectedTilesP2.join(',')}`)
         console.log('P2: ' + checkIfWinner(this.selectedTilesP2));
-        //console.log(moveInt)
+        //console.log(moveNumber)
     }
 }
+// Reset button, reloads page thus reseting game.
 class resetButton {
     constructor() {
         this.element = document.createElement('div');
@@ -100,15 +104,13 @@ class resetButton {
         this.element.innerText = 'reset';
         this.element.addEventListener('click', () => {
             this.handleClick();
-            location.reload();
         });
     }
     handleClick() {
-        this.element.innerText = 'pressed';
+        location.reload();
     }
 }
-//const boardMap = new TileMap(rows,cols)
-//document.getElementById('game')?.appendChild(boardMap.element)
+// Creates display layout module containing board, score and reset button to add to main div.
 class displayLayout {
     constructor() {
         var _a;
@@ -123,7 +125,9 @@ class displayLayout {
         this.gameContainer.appendChild(boardMap.element);
         this.gameContainer.appendChild(scoreElement);
         this.gameContainer.appendChild(resetElement.element);
+        // With each click...
         this.gameContainer.addEventListener('click', () => {
+            // Checks if either black or white won.
             if (checkIfWinner(boardMap.selectedTilesP1)) {
                 scoreElement.innerText = 'Black Wins';
                 gameOver = true;
@@ -133,23 +137,26 @@ class displayLayout {
                 gameOver = true;
             }
             else {
-                if (moveInt === rows * cols)
+                //Otherwise checks for draw.
+                if (moveNumber === rows * cols)
                     scoreElement.innerText = 'Draw';
                 else {
-                    if (moveInt % 2 === 0)
+                    //Finally checks who's turn it is.
+                    if (moveNumber % 2 === 0)
                         scoreElement.innerText = 'White Turn';
                     else
                         scoreElement.innerText = 'Black Turn';
                 }
             }
         });
-        (_a = document
-            .getElementById('game')) === null || _a === void 0 ? void 0 : _a.append(this.gameContainer);
+        (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.append(this.gameContainer);
     }
 }
-const tets = new displayLayout();
+// Initiates display
+const displayGame = new displayLayout();
+// Various check for winner functions.
 function checkIfWinner(board) {
-    // Horizontal check
+    // Horizontal 
     for (let j = 0; j < cols * (rows - 1); j = j + cols) {
         for (let i = 0; i < cols - 4; i++) {
             if (board.includes(j + i) &&
@@ -161,7 +168,7 @@ function checkIfWinner(board) {
             }
         }
     }
-    // Vertical check
+    // Vertical 
     for (let j = 0; j < cols; j++) {
         for (let i = 0; i < rows * (cols - 4); i = i + cols) {
             if (board.includes(j + i) &&
@@ -173,7 +180,7 @@ function checkIfWinner(board) {
             }
         }
     }
-    // Diagonal down check
+    // Diagonal down 
     for (let j = 0; j < cols - 4; j++) {
         for (let i = 0; i < rows * (cols - 4); i = i + cols) {
             if (board.includes(j + i) &&
@@ -185,7 +192,7 @@ function checkIfWinner(board) {
             }
         }
     }
-    // Diagonal up check
+    // Diagonal up 
     for (let j = 0; j < cols - 4; j++) {
         for (let i = 4 * cols; i < rows * (cols); i = i + cols) {
             if (board.includes(j + i) &&
