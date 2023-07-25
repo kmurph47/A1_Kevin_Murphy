@@ -8,8 +8,9 @@
   },
   "dependencies": {
     "parcel": "^2.6.2",
-    "typescript": "^4.7.4"
+    "typescript": "^5.1.6"
   },
-  "author": "",
-  "description": ""
+  "author": "KM",
+  "description": "",
+  "repository": "git@github.com:kmurph47/A1_Kevin_Murphy.git"
 }
