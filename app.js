@@ -1,7 +1,7 @@
 "use strict";
 // SET NUMBER OF ROWS AND COLUMNS HERE.
-let rows = 6;
-let cols = 7;
+let rows = 11;
+let cols = 20;
 let moveNumber = 0;
 let gameOver = false;
 var STATUS;

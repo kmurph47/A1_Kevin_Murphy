@@ -1,6 +1,6 @@
 // SET NUMBER OF ROWS AND COLUMNS HERE.
-let rows: number = 6;
-let cols: number = 7;
+let rows: number = 11;
+let cols: number = 20;
 
 let moveNumber: number = 0;
 let gameOver: boolean = false;
