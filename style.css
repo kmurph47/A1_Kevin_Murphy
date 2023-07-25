@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  font-size: 2.5rem;
+  padding: 1rem;
+  background-color: #752626;
+  color: #ffffff;
+  font-weight: bolder;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.main {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tile-map {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  background-color: #e899068f;
+}
+
+.row {
+  display: flex;
+  column-gap: 0.5rem;
+}
+
+.tile {
+  height: 2rem;
+  width: 2rem;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.tile.p1_selected {
+  background-color: #000000;
+}
+
+.tile.p2_selected {
+  background-color: #ffffff;
+}
+
+.tile.available {
+  background-color: #aaa7a7ce;
+}
+
+.gameSpace {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  max-width: 1000px;
+  margin: 0 auto;
+  perspective: 500px;
+}
+
+.score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fffbfb;
+  height: 30px;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 2rem;
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+}
+
+.reset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ccc;
+  height: 70px;
+  width: 100%;
+  margin: 2rem 0;
+  font-size: 2rem;
+  color: white;
+  font-weight: 900;
+}
